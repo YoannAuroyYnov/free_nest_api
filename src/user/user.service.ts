@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { SecurityService } from '../common/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -14,6 +15,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly securityService: SecurityService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -23,9 +25,11 @@ export class UserService {
     if (existingUser) {
       throw new ConflictException('User already exists');
     }
-    const result = await this.userRepository.save(createUserDto);
-    console.log('Created user: ', result);
-    return result;
+    createUserDto.password = await this.securityService.hashPassword(
+      createUserDto.password,
+    );
+    const user = this.userRepository.create(createUserDto);
+    return await this.userRepository.save(user);
   }
 
   async findAll() {
@@ -41,17 +45,19 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
     }
-    console.log('Finded user: ', user);
+
     return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const result = await this.userRepository.update(id, updateUserDto);
-    if (result.affected === 0) {
-      throw new NotFoundException(`User #${id} not found`);
+    const user = await this.findOne(id);
+    if (updateUserDto.password) {
+      updateUserDto.password = await this.securityService.hashPassword(
+        updateUserDto.password,
+      );
     }
-    console.log('Updated user: ', result);
-    return await this.findOne(id);
+    const updatedUser = this.userRepository.merge(user, updateUserDto);
+    return await this.userRepository.save(updatedUser);
   }
 
   async remove(id: number) {
@@ -59,7 +65,6 @@ export class UserService {
     if (result.affected === 0) {
       throw new NotFoundException(`User #${id} not found`);
     }
-    console.log('Deleted user: ', result);
-    return result.affected;
+    return;
   }
 }
