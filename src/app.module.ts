@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { EventsModule } from './events/events.module';
+import { UserModule } from 'src/user/user.module';
+import { EventsModule } from 'src/events/events.module';
+import { CanvaModule } from 'src/canva/canva.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { EventsModule } from './events/events.module';
       inject: [ConfigService],
     }),
     UserModule,
+    CanvaModule,
   ],
   controllers: [],
   providers: [],

@@ -4,15 +4,17 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { PixelLog } from 'src/canva/entities/pixel-log.entity';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  first_name: string;
+  @Column({ name: 'first_name', type: 'varchar', length: 255 })
+  firstName: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
@@ -23,9 +25,12 @@ export class User {
   @Column({ type: 'int', nullable: true })
   age?: number;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @OneToMany(() => PixelLog, (log) => log.user)
+  pixelLogs: PixelLog[];
 }
