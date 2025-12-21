@@ -8,7 +8,9 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { CanvaService } from 'src/canva/canva.service';
+import { MessageService } from 'src/message/message.service';
 import { CreatePixelLogDto } from 'src/canva/dto/create-pixel-log.dto';
+import { CreateMessageDto } from 'src/message/dto/create-message.dto';
 
 @WebSocketGateway({
   cors: {
@@ -19,7 +21,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly canvaService: CanvaService) {}
+  constructor(
+    private readonly canvaService: CanvaService,
+    private readonly messageService: MessageService,
+  ) {}
 
   handleConnection(client: Socket) {
     console.log(`Socket client connected: ${client.id}`);
@@ -30,9 +35,15 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('new_message')
-  handleMessage(@MessageBody() data: string): void {
-    console.log('Message received:', data);
-    this.server.emit('new_message', data); // Broadcast to all clients
+  async handleMessage(@MessageBody() data: string): Promise<void> {
+    if (!data) return;
+    const payload = JSON.parse(data) as CreateMessageDto;
+    try {
+      await this.messageService.emitNewMessage(payload);
+      this.server.emit('new_message', data);
+    } catch (error) {
+      console.error('Error painting pixel:', error);
+    }
   }
 
   @SubscribeMessage('paint_a_pixel')

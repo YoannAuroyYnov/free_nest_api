@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { EventsModule } from 'src/events/events.module';
 import { CanvaModule } from 'src/canva/canva.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CanvaModule } from 'src/canva/canva.module';
     }),
     UserModule,
     CanvaModule,
+    MessageModule,
   ],
   controllers: [],
   providers: [],
