@@ -58,6 +58,23 @@ export class UserService {
     return user;
   }
 
+  async findByProviderId(provider: 'google' | 'apple', providerId: string) {
+    const key =
+      provider === 'google'
+        ? 'googleId'
+        : provider === 'apple'
+          ? 'appleId'
+          : false;
+    if (!key) throw new NotFoundException('Provider not supported');
+
+    const user = await this.userRepository.findOneBy({ [key]: providerId });
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     if (updateUserDto.password) {

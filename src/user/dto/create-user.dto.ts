@@ -12,6 +12,10 @@ export class CreateUserDto {
   @IsNotEmpty()
   firstName: string;
 
+  @IsOptional()
+  @IsString()
+  providerId?: string;
+
   @IsEmail()
   email: string;
 

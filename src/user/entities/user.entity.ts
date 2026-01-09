@@ -14,6 +14,15 @@ export class User {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+  @Column({
+    name: 'provider_id',
+    type: 'varchar',
+    length: 255,
+    unique: true,
+    nullable: true,
+  })
+  providerId?: string;
+
   @Column({ name: 'first_name', type: 'varchar', length: 255 })
   firstName: string;
 
