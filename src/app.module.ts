@@ -5,6 +5,7 @@ import { UserModule } from 'src/user/user.module';
 import { EventsModule } from 'src/events/events.module';
 import { CanvaModule } from 'src/canva/canva.module';
 import { MessageModule } from './message/message.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MessageModule } from './message/message.module';
     UserModule,
     CanvaModule,
     MessageModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
