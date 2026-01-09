@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { CreateCanvaDto } from 'src/canva/dto/create-canva.dto';
 import { UpdateCanvaDto } from 'src/canva/dto/update-canva.dto';
 import { Canva } from 'src/canva/entities/canva.entity';
@@ -17,6 +18,7 @@ export class CanvaService {
     private readonly pixelLogRepository: Repository<PixelLog>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async create(createCanvaDto: CreateCanvaDto) {
@@ -25,9 +27,15 @@ export class CanvaService {
   }
 
   async findAll() {
-    return await this.canvaRepository.find({
+    const cachedCanva = await this.findCachedData('canva_1');
+    if (cachedCanva) return cachedCanva;
+
+    const canva = await this.canvaRepository.find({
       where: { id: 1 },
     });
+
+    await this.cacheData(canva);
+    return canva;
   }
 
   findOne(id: number) {
@@ -40,6 +48,14 @@ export class CanvaService {
 
   remove(id: number) {
     return `This action on canva #${id} is not implemented yet.`;
+  }
+
+  async cacheData(data: Canva[], ttl: number = 1000) {
+    return this.cacheManager.set('canva_1', data, ttl);
+  }
+
+  async findCachedData(key: string) {
+    return this.cacheManager.get(key);
   }
 
   async paintPixel(data: CreatePixelLogDto): Promise<Canva> {
