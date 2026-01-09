@@ -8,27 +8,16 @@ import { ConfigService } from '@nestjs/config';
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(configService: ConfigService) {
     super({
-      clientID:
-        configService.get<string>('GOOGLE_CLIENT_ID') || 'undefined secret',
-      clientSecret:
-        configService.get<string>('GOOGLE_CLIENT_SECRET') || 'undefined secret',
-      callbackURL:
-        configService.get<string>('GOOGLE_CALLBACK_URL') || 'undefined secret',
+      clientID: configService.get<string>('GOOGLE_CLIENT_ID') || 'undefined secret',
+      clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET') || 'undefined secret',
+      callbackURL: configService.get<string>('GOOGLE_CALLBACK_URL') || 'undefined secret',
       scope: ['email', 'profile'],
     });
   }
 
-  validate(
-    _accessToken: string,
-    _refreshToken: string,
-    profile: Profile,
-    done: VerifyCallback,
-  ) {
+  validate(_accessToken: string, _refreshToken: string, profile: Profile, done: VerifyCallback) {
     if (!profile.emails || !profile.emails.length || !profile.name) {
-      return done(
-        new UnauthorizedException('Missing Google profile info'),
-        false,
-      );
+      return done(new UnauthorizedException('Missing Google profile info'), false);
     }
 
     const user = {

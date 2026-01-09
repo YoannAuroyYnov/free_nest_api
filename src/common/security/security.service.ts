@@ -20,9 +20,7 @@ export class SecurityService {
     return bcrypt.compare(password, hash);
   }
 
-  async generateAccessToken(
-    payloadDto: payloadDto,
-  ): Promise<{ accessToken: string }> {
+  async generateAccessToken(payloadDto: payloadDto): Promise<{ accessToken: string }> {
     const { userId, ...rest } = payloadDto;
     const payload = {
       sub: userId,

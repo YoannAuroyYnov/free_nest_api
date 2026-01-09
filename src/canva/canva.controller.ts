@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CanvaService } from './canva.service';
 import { CreateCanvaDto } from './dto/create-canva.dto';
 import { UpdateCanvaDto } from './dto/update-canva.dto';

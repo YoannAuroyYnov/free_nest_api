@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  IsPositive,
-  Min,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsPositive, Min } from 'class-validator';
 
 export class CreatePixelLogDto {
   @IsNumber()

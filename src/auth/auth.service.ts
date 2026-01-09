@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { SecurityService } from 'src/common/security/security.service';
 import { SignInDto } from './dto/sign-in.dto';
@@ -16,9 +12,7 @@ export class AuthService {
     private readonly securityService: SecurityService,
   ) {}
 
-  async signin(
-    signInDto: SignInDto,
-  ): Promise<{ accessToken: string } | undefined> {
+  async signin(signInDto: SignInDto): Promise<{ accessToken: string } | undefined> {
     try {
       const { email, password } = signInDto;
       const user = await this.usersService.findOneByEmailWithPassword(email);
@@ -35,8 +29,7 @@ export class AuthService {
 
       return { accessToken };
     } catch (error) {
-      if (error instanceof Error)
-        throw new UnauthorizedException('Invalid email or password');
+      if (error instanceof Error) throw new UnauthorizedException('Invalid email or password');
     }
   }
 

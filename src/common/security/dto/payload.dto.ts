@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class payloadDto {
   @IsInt()

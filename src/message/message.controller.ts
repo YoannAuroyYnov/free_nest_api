@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
 import { MessageService } from 'src/message/message.service';
 import { CreateMessageDto } from 'src/message/dto/create-message.dto';
 import { UpdateMessageDto } from 'src/message/dto/update-message.dto';

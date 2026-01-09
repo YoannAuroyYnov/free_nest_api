@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SecurityService } from '../common/security/security.service';
@@ -25,9 +21,7 @@ export class UserService {
     if (existingUser) {
       throw new ConflictException('User already exists');
     }
-    createUserDto.password = await this.securityService.hashPassword(
-      createUserDto.password,
-    );
+    createUserDto.password = await this.securityService.hashPassword(createUserDto.password);
     const user = this.userRepository.create(createUserDto);
     return await this.userRepository.save(user);
   }
@@ -73,12 +67,7 @@ export class UserService {
   }
 
   async findByProviderId(provider: 'google' | 'apple', providerId: string) {
-    const key =
-      provider === 'google'
-        ? 'googleId'
-        : provider === 'apple'
-          ? 'appleId'
-          : false;
+    const key = provider === 'google' ? 'googleId' : provider === 'apple' ? 'appleId' : false;
     if (!key) throw new NotFoundException('Provider not supported');
 
     const user = await this.userRepository.findOneBy({ [key]: providerId });
@@ -92,9 +81,7 @@ export class UserService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     if (updateUserDto.password) {
-      updateUserDto.password = await this.securityService.hashPassword(
-        updateUserDto.password,
-      );
+      updateUserDto.password = await this.securityService.hashPassword(updateUserDto.password);
     }
     const updatedUser = this.userRepository.merge(user, updateUserDto);
     return await this.userRepository.save(updatedUser);
