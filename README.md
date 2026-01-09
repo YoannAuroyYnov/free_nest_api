@@ -26,6 +26,12 @@ Introduction aux WebSockets pour l'interactivité en temps réel.
 - **Chat** : Système de messagerie instantanée.
 - **Pixel War** : Création d'un jeu collaboratif de dessin sur grille (Canva) avec mise à jour en temps réel des pixels.
 
+### Étape 4 : Optimisations et Authentification avancée
+
+- **Cache** : Mise en place d'un cache sur l'index du Canva pour accélérer les accès et limiter la charge sur la base de données (NestJS CacheModule).
+- **Login local** : Authentification classique par email/mot de passe avec gestion sécurisée du hash et des erreurs.
+- **SSO Google** : Authentification via Google (OAuth2) avec Passport, création automatique de l'utilisateur si besoin, et génération d'un JWT à la connexion.
+
 ## Stack Technique
 
 - **Framework** : NestJS
