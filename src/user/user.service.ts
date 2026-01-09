@@ -58,6 +58,20 @@ export class UserService {
     return user;
   }
 
+  async findOneByEmailWithPassword(email: string) {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
+
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    return user;
+  }
+
   async findByProviderId(provider: 'google' | 'apple', providerId: string) {
     const key =
       provider === 'google'

@@ -21,7 +21,7 @@ export class AuthService {
   ): Promise<{ accessToken: string } | undefined> {
     try {
       const { email, password } = signInDto;
-      const user = await this.usersService.findOneByEmail(email);
+      const user = await this.usersService.findOneByEmailWithPassword(email);
 
       const { password: hashedPassword } = user;
       await this.securityService.compare(password, hashedPassword);

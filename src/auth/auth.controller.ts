@@ -19,6 +19,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signin')
+  @HttpCode(200)
   signin(
     @Body() signInDto: SignInDto,
   ): Promise<{ accessToken: string } | undefined> {
@@ -26,7 +27,6 @@ export class AuthController {
   }
 
   @Post('signup')
-  @HttpCode(201)
   signup(@Body() signUpDto: SignUpDto): Promise<void> {
     return this.authService.signup(signUpDto);
   }
